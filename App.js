@@ -3,7 +3,7 @@ import Header from './components/Header';
 import ReviewForm from './components/ReviewForm';
 import FeaturesSection from './components/FeaturesSection';
 import Footer from './components/Footer';
-import CodeReviewDetails from './pages/CodeReviewApp';
+import CodeReviewApp from './pages/CodeReviewApp';
 
 const App = () => {
   const [loading, setLoading] = useState(false);
@@ -76,6 +76,14 @@ const App = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 font-sans">
       <Header />
 
+      <ReviewForm onSubmit={handleReviewSubmit} loading={loading} />
+      <FeaturesSection />
+      <Footer />
+    </div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 font-sans">
+      <ReviewForm onSubmit={handleReviewSubmit} loading={loading} />
+      <FeaturesSection />
+      <Footer />
+    </div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 font-sans">
       <ReviewForm onSubmit={handleReviewSubmit} loading={loading} />
       <FeaturesSection />
       <Footer />
