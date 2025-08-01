@@ -8,7 +8,7 @@ import CodeReviewApp from './pages/CodeReviewApp';
 const App = () => {
   const [loading, setLoading] = useState(false);
   const [showCodeReview, setShowCodeReview] = useState(false);
-  const [codeReviewData, setCodeReviewData] = useState(null);
+  // Removed codeReviewData state, as it's no longer used.  A real implementation would fetch this data.
   const [formData, setFormData] = useState({
     repoUrl: ''
   });
@@ -58,12 +58,11 @@ const App = () => {
           ]
         }
       };
-      setCodeReviewData(reviewResults);
-      setShowCodeReview(true);
       setLoading(false);
     } catch (error) {
       console.error("Error during code review submission:", error);
       // Handle the error appropriately (e.g., display an error message to the user)
+      setLoading(false);
     }
   };
 
@@ -76,14 +75,6 @@ const App = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 font-sans">
       <Header />
 
-      <ReviewForm onSubmit={handleReviewSubmit} loading={loading} />
-      <FeaturesSection />
-      <Footer />
-    </div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 font-sans">
-      <ReviewForm onSubmit={handleReviewSubmit} loading={loading} />
-      <FeaturesSection />
-      <Footer />
-    </div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 font-sans">
       <ReviewForm onSubmit={handleReviewSubmit} loading={loading} />
       <FeaturesSection />
       <Footer />
