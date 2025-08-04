@@ -2,8 +2,8 @@
 
 # PUBLIC_INTERFACE
 def main():
-    """Prints 'hello world' to the standard output."""
-    print('hello world')
+    """Prints 'hello earth' to the standard output."""
+    print('hello earth')
 
 
 if __name__ == '__main__':
