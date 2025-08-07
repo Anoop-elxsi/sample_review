@@ -78,7 +78,7 @@ const App = () => {
       <ReviewForm onSubmit={handleReviewSubmit} loading={loading} />
       <FeaturesSection />
       <Footer />
-    </div>
+    </div
   );
 };
 
