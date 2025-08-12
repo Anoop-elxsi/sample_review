@@ -22,42 +22,14 @@ const App = () => {
 
     // Simulate API call for code review
     try {
-      // Mock code review response data in the format expected by CodeReviewDetails
-      const reviewResults = {
-        "UserService.js": {
-          "Logic Errors & Potential Bugs": [
-            "Null pointer exception possible in getUserById() when user ID is invalid",
-            "Race condition in updateUserStatus() method when multiple threads access simultaneously",
-            "Missing validation for email format in createUser() function"
-          ],
-          "Security Vulnerabilities": [
-            "SQL injection vulnerability in raw query execution",
-            "Password stored in plain text without encryption",
-            "Missing authentication check in sensitive user operations"
-          ],
-          "Code Quality & Maintainability": [
-            "Large method violating single responsibility principle",
-            "Hardcoded configuration values should be externalized",
-            "Missing error handling and logging mechanisms"
-          ]
-        },
-        "PaymentProcessor.js": {
-          "Potential Bugs": [
-            "Integer overflow in amount calculation for large transactions",
-            "Memory leak in payment validation due to unclosed resources"
-          ],
-          "Security Vulnerabilities": [
-            "Credit card numbers logged in plain text",
-            "Missing input sanitization for payment amounts",
-            "API keys exposed in configuration files"
-          ],
-          "Code Quality & Maintainability": [
-            "Duplicate code in payment validation methods",
-            "Complex nested if-else statements reducing readability",
-            "Missing unit tests for critical payment flows"
-          ]
+      const response = await fetch('/api/code-review', { // Replace with actual API endpoint
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json'
         }
-      };
+      });
+      const reviewResults = await response.json();
       setLoading(false);
     } catch (error) {
       console.error("Error during code review submission:", error);
@@ -78,7 +50,7 @@ const App = () => {
       <ReviewForm onSubmit={handleReviewSubmit} loading={loading} />
       <FeaturesSection />
       <Footer />
-    </div
+    </div>
   );
 };
 
