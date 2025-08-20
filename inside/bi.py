@@ -1,15 +1,4 @@
-import os
-import shutil
-from urllib.parse import urlparse
-import git
-import logging
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-
-BASE_CLONE_DIR = "C:/repos"  # Persistent location to store repos
-os.makedirs(BASE_CLONE_DIR, exist_ok=True)
-
+# Clone a GitHub repository to a persistent local directory
 def clone_repo(github_url, branch, username=None, token=None):
     """
     Clone a GitHub repository to a persistent local directory
@@ -63,46 +52,50 @@ def clone_repo():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route('/list-files', methods=['GET'])
+@app.route('/list_files', methods=['POST'])
 def list_files():
     """
-    List all files in the cloned repo
+    Lists the files in a git repository.
     """
-    repo_path = request.args.get("repo_path")
-    if not repo_path or not os.path.exists(repo_path):
-        return jsonify({"error": "Repository path not found"}), 404
+    data = request.get_json()
+    repo_path = data.get('repo_path')
 
-    file_list = []
-    for root, _, files in os.walk(repo_path):
-        for file in files:
-            file_list.append(os.path.relpath(os.path.join(root, file), repo_path))
-
-    return jsonify({"files": file_list})
-
-
-@app.route('/get-file', methods=['GET'])
-def get_file():
-    """
-    Read a specific file from the cloned repo
-    """
-    repo_path = request.args.get("repo_path")
-    file_name = request.args.get("file")
-
-    if not repo_path or not os.path.exists(repo_path):
-        return jsonify({"error": "Repository path not found"}), 404
-
-    full_path = os.path.join(repo_path, file_name)
-    if not os.path.exists(full_path):
-        return jsonify({"error": "File not found"}), 404
+    if not repo_path:
+        return jsonify({'error': 'repo_path is required'}), 400
 
     try:
-        with open(full_path, "r", encoding="utf-8", errors="ignore") as f:
+        if not os.path.exists(repo_path):
+            return jsonify({'error': 'repo_path does not exist'}), 404
+        
+        file_list = []
+        for root, _, files in os.walk(repo_path):
+            for file in files:
+                file_list.append(os.path.relpath(os.path.join(root, file), repo_path))
+        return jsonify({'files': file_list})
+    except OSError as e:
+        logging.error(f"Error walking directory: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/get_file', methods=['POST'])
+def get_file():
+    """
+    Gets a specific file from a git repository.
+    """
+    data = request.get_json()
+    repo_path = data.get('repo_path')
+    file_path = data.get('file_path')
+
+    if not repo_path or not file_path:
+        return jsonify({'error': 'repo_path and file_path are required'}), 400
+
+    try:
+        if not os.path.exists(os.path.join(repo_path, file_path)):
+            return jsonify({'error': 'file not found'}), 404
+        
+        with open(os.path.join(repo_path, file_path), 'r', encoding='utf-8') as f:
             content = f.read()
-        return jsonify({"content": content})
-    except Exception as e:
+        return jsonify({'content': content})
+    except OSError as e:
         logging.error(f"Error reading file: {e}")
-        return jsonify({"error": str(e)}), 500
-
-
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+        return jsonify({'error': str(e)}), 500
