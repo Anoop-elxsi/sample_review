@@ -1,3 +1,2 @@
-# This script prints "Hello World" to the console.
-# This is a basic example demonstrating a Python program.
+# This script prints a greeting message.
 print("Hello World")

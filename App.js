@@ -38,6 +38,8 @@ const App = () => {
       console.error("Error during code review submission:", error);
       // Handle the error appropriately (e.g., display an error message to the user)
       setLoading(false);
+      //Consider displaying a user-friendly error message
+      setErrors({ [error.message]: 'An error occurred during the review process.' });
     }
   };
 
@@ -53,7 +55,7 @@ const App = () => {
       <ReviewForm onSubmit={handleReviewSubmit} loading={loading} />
       <FeaturesSection />
       <Footer />
-    </div
+    </div>
   );
 };
 
