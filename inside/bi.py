@@ -3,8 +3,9 @@ def get_value():
     This function retrieves a value from the user.
     """
     while True:
-        value = input("Enter a value: ")
-        if value.isdigit():
+        try:
+            value = input("Enter a value: ")
+            value = int(value)  # Attempt to convert to integer
             return value
-        else:
+        except ValueError:
             print("Invalid input. Please enter a number.")
