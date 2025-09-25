@@ -6,18 +6,19 @@ import Footer from './components/Footer';
 import CodeReviewApp from './pages/CodeReviewApp';
 
 const App = () => {
-  const [loading, setLoading] = useState(false);
-  const [codeReviewVisible, setCodeReviewVisible] = useState(false);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [formData, setFormData] = useState({
-    repoUrl: ''
+  const [state, setState] = useState({
+    loading: false,
+    codeReviewVisible: false,
+    showSuggestions: false,
+    formData: { repoUrl: '' },
+    errors: {},
+    urlHistory: []
   });
-  const [errors, setErrors] = useState({});
-  const [urlHistory, setUrlHistory] = useState([]);
+
+  const { loading, codeReviewVisible, formData, errors, urlHistory } = state;
 
   const handleReviewSubmit = async (formData) => {
     setLoading(true);
-
     try {
       const response = await fetch('/api/code-review', {
         method: 'POST',
@@ -38,7 +39,6 @@ const App = () => {
       console.error("Error during code review submission:", error);
       // Handle the error appropriately (e.g., display an error message to the user)
       setLoading(false);
-      //Consider displaying a user-friendly error message
       setErrors({ [error.message]: 'An error occurred during the review process.' });
     }
   };
@@ -55,7 +55,7 @@ const App = () => {
       <ReviewForm onSubmit={handleReviewSubmit} loading={loading} />
       <FeaturesSection />
       <Footer />
-    </div>
+    </div >
   );
 };
 
